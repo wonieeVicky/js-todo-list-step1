@@ -1,6 +1,7 @@
 import TodoInput from "./components/TodoInput.js";
 import TodoList from "./components/TodoList.js";
 import TodoCount from "./components/TodoCount.js";
+import TodoStatus from "./components/TodoStatus.js";
 
 function App() {
   if (!(this instanceof App)) {
@@ -8,7 +9,11 @@ function App() {
   }
 
   // this.todos = [];
-  this.todos = [{ content: "이별하기", isCompleted: false }];
+  this.todos = [
+    { content: "aa", isCompleted: false },
+    { content: "bb", isCompleted: true },
+  ];
+  this.status;
 
   const onAdd = (todo) => {
     const originTodos = this.todos;
@@ -52,8 +57,13 @@ function App() {
     this.setState(newTodos);
   };
 
+  const onSetStatus = (status) => {
+    this.status = status;
+  };
+
   this.setState = (newData) => {
     this.todos = newData;
+
     this.render();
   };
 
@@ -66,12 +76,17 @@ function App() {
     this.$input = document.querySelector("#new-todo-title");
     this.$list = document.querySelector("#todo-list");
     this.$count = document.querySelector(".todo-count strong");
+    this.$filters = document.querySelector(".filters");
+
     try {
       this.todoInput = new TodoInput(this.$input, { onAction: { add: onAdd } });
       this.todoList = new TodoList(this.$list, this.todos, {
         onAction: { toggle: onToggle, remove: onRemove, change: onChange },
       });
       this.todoCount = new TodoCount(this.$count, this.todos);
+      this.todoStatus = new TodoStatus(this.$filters, this.todos, {
+        onAction: { setStatus: onSetStatus },
+      });
     } catch (e) {
       console.log(error);
     }

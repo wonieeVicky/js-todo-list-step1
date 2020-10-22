@@ -22,7 +22,7 @@ function TodoList(todoList, todos, { onAction }) {
               <input class="toggle" type="checkbox" ${
                 todo.isCompleted ? "checked" : ""
               } />
-              <label>${todo.content}</label>
+              <label class='label'>${todo.content}</label>
               <button class="destroy"></button>
             </div>
             <input class="edit" value="${todo.content}" />
@@ -37,10 +37,26 @@ function TodoList(todoList, todos, { onAction }) {
 
   this.$todoList.addEventListener("click", (e) => {
     const { className, nodeName } = e.target;
-
     if (className === "toggle" && nodeName === "INPUT") {
       const idx = e.target.closest("li").dataset.idx;
       this.onAction.toggle(idx);
+    }
+    if (className === "destroy" && nodeName === "BUTTON") {
+      const idx = e.target.closest("li").dataset.idx;
+      this.onAction.remove(idx);
+    }
+  });
+
+  this.$todoList.addEventListener("dblclick", (e) => {
+    const { className, nodeName } = e.target;
+    if (className === "label" && nodeName === "LABEL") {
+      //e.target.closest("li").classList.add("editing");
+      const $li = e.target.closest("li");
+      $li.classList.add("editing");
+      const $input = $li.querySelector("input.edit");
+      $input.focus();
+      $input.setSelectionRange($input.value.length, $input.value.length);
+      this.originValue = $input.value; // escape
     }
   });
 }

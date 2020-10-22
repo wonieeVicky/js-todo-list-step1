@@ -15,7 +15,13 @@ function App() {
     const newTodos = [...originTodos, { content: todo, isCompleted: false }];
     this.setState(newTodos);
   };
-
+  const onRemove = (idx) => {
+    const originTodos = this.todos;
+    const newTodos = originTodos.filter(
+      (todo, index) => index !== parseInt(idx)
+    );
+    this.setState(newTodos);
+  };
   const onToggle = (idx) => {
     const originTodos = this.todos;
     const newTodos = originTodos.map((todo, index) => {
@@ -44,7 +50,7 @@ function App() {
     this.$todoList = document.querySelector("#todo-list");
     this.todoInput = new TodoInput(this.$input, { onAction: { add: onAdd } });
     this.todoList = new TodoList(this.$todoList, this.todos, {
-      onAction: { toggle: onToggle },
+      onAction: { toggle: onToggle, remove: onRemove },
     });
   };
 

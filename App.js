@@ -5,11 +5,28 @@ function App() {
     throw new Error("error: App must be called with new!");
   }
 
-  this.todos = [{ content: "add something", isCompleted: false }];
+  this.todos = [
+    { content: "aa", isCompleted: false },
+    { content: "aa", isCompleted: false },
+  ];
 
   const onAdd = (todo) => {
     const originTodos = this.todos;
     const newTodos = [...originTodos, { content: todo, isCompleted: false }];
+    this.setState(newTodos);
+  };
+
+  const onToggle = (idx) => {
+    const originTodos = this.todos;
+    const newTodos = originTodos.map((todo, index) => {
+      if (index === parseInt(idx)) {
+        return {
+          ...todo,
+          isCompleted: !todo.isCompleted,
+        };
+      }
+      return todo;
+    });
     this.setState(newTodos);
   };
 
@@ -26,7 +43,9 @@ function App() {
     this.$input = document.querySelector("#new-todo-title");
     this.$todoList = document.querySelector("#todo-list");
     this.todoInput = new TodoInput(this.$input, { onAction: { add: onAdd } });
-    this.todoList = new TodoList(this.$todoList, this.todos);
+    this.todoList = new TodoList(this.$todoList, this.todos, {
+      onAction: { toggle: onToggle },
+    });
   };
 
   this.init();
